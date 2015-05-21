@@ -1,12 +1,20 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
+var server = require('http').createServer(app);
+var path = require("path")
+var port = process.env.PORT || 3000
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+
+app.use(express.static(__dirname + '/'));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname + '/app/index.html'));
 });
 
+
 var io = require('socket.io')(http);
+
 io.on('connection', function(socket){
   console.log('a user connected');
   
@@ -23,4 +31,3 @@ http.listen(3000, function(){
 });
 
 module.exports = server;
-
