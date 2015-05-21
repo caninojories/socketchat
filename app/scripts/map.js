@@ -87,4 +87,4 @@ function addMarker(location) {
 }
 
 //Listen for other users markers
-socket.on('show-marker', addMarker);
+socket.on('show-marker', addMarker(location));
