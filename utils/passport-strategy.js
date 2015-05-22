@@ -3,7 +3,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var strategy = {};
 
 strategy.facebook = new FacebookStrategy({
-  clientID : "FACEBOOK_APP_ID_HERE",
+  clientID : "653014024831372",
   clientSecret: "FACEBOOK_APP_SECRET_HERE",
   callbackURL: "FACEBOOK_APP_CALLBACK_URL_HERE",
   profileFields: ['id', 'name','picture.type(large)', 'emails', 'gender', 'profileUrl']  
