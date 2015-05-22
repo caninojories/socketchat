@@ -11,10 +11,14 @@ var methodOverride = require('method-override');
 var port = process.env.PORT || 3000
 var io = require('socket.io')(http);
 var http = require('http').Server(app);
+var markers = [];
+var server = require('http').createServer(app);
+var passportStrategy = require('../utils/passport-strategy');
 
 var FACEBOOK_APP_ID = 
 var FACEBOOK_APP_SECRET = 
 
+passport.use(passportStrategy.facebook);
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -32,19 +36,19 @@ var sessionData = session({
   saveUninitialized: true
 });
 
+io.use(function(socket, next){
+  sessionData(socket.request, socket.request.res, next);
+});
+
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
+
     process.nextTick(function () {
       
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
       return done(null, profile);
     });
   }
@@ -118,9 +122,13 @@ io.on('connection', function(socket){
 
 });
 
-app.listen(port);
+app.listen(port, function(){
+  console.log('five minute catch up is on port 3000');
+});
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login')
 }
+
+module.exports = server;
