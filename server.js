@@ -4,6 +4,7 @@ var server = require('http').createServer(app);
 var path = require("path")
 var port = process.env.PORT || 3000
 var http = require('http').Server(app);
+var markers = [];
 
 
 app.use(express.static(__dirname + '/'));
@@ -17,6 +18,7 @@ var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
   console.log('a user connected');
+   markers.push(socket.id);
   
   socket.on('marker', function(data) {
   
