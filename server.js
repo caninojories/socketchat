@@ -5,7 +5,7 @@ var path = require("path")
 var port = process.env.PORT || 3000
 var http = require('http').Server(app);
 var markers = [];
-
+var io = require('socket.io')(http);
 
 
 app.use(express.static(__dirname + '/'));
@@ -14,14 +14,19 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/app/index.html'));
 });
 
+app.get('/mapjs', function(req, res){
+  res.sendFile(__dirname + '/app/scripts/map.js');
+});
 
-var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-   markers.push(socket.id);
+    console.log('a user connected');
   
-  socket.on('marker', function(data) {
+    socket.on('marker', function(data) {
+      data.socketId = socket.id;
+      
+      markers[socket.id] = data;
+
   
   console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
     socket.broadcast.emit('show-marker', data);

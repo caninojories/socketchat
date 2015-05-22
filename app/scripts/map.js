@@ -22,6 +22,12 @@ function initialize() {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
 
+
+      socket.emit('marker', {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      });
+
       var infowindow = new google.maps.InfoWindow({
         map: map,
         position: pos,
@@ -57,34 +63,21 @@ function handleNoGeolocation(errorFlag) {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-
-// listen for Marker event
-google.maps.event.addListener(map, 'load', function(event) {
-
-    var marker = addMarker(event.latLng);
-
-    
-    socket.emit('marker', {
-        'lat': marker.position.k,
-        'lng': marker.position.D
-    });
-});
-
 // Add a marker to the map 
-function addMarker(location) {
+function addMarker(location, text) {
+    text = text || '';
 
     var marker = new google.maps.Marker({
         position: location,
         map: map
     });
 
-    markers.push(marker);
+    var infowindow = new google.maps.InfoWindow();
 
-    console.log(location);
-    console.log("marker: " + marker.position.k + " " + marker.position.D);
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.setContent(text); 
+      infowindow.open(map,marker);
+    });
 
     return marker;
 }
-
-//Listen for other users markers
-socket.on('show-marker', addMarker(location));

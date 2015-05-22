@@ -69,7 +69,19 @@
         <script src="app/scripts/map.js"></script>
         <script src="app/scripts/controllers/about.js"></script>
         <!-- socket scripts -->
-        <script src="/socket.io/socket.io.js"></script>
-        <script> var socket = io();</script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/mapjs"></script>
+      <script>
+      var socket = io();
+
+      //Listen for other users markers
+      socket.on('show-marker', function(data) {
+        console.log(data);
+        var loc = new google.maps.LatLng(data.lat,
+                                       data.lng);
+        addMarker(loc, data.socketId);
+      });
+    </script>
 </body>
 </html>
