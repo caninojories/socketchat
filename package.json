@@ -4,7 +4,7 @@
   "description": "my first socket.io app",
   "dependencies": {
     "express": "^4.10.2",
-    "express-session": "1.10.3",
+    "express-session": "^1.10.3",
     "http": "0.0.0",
     "passport": "^0.2.2",
     "passport-facebook": "*",

@@ -4,6 +4,7 @@ var util = require('util')
 var FacebookStrategy = require('passport-facebook').Strategy
 var logger = require('morgan')
 var session = require('express-session')
+var sessionStore = require('sessionstore');
 var bodyParser = require("body-parser")
 var cookieParser = require("cookie-parser")
 var methodOverride = require('method-override');
@@ -23,6 +24,13 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+var sessionData = session({
+  store: sessionStore.createSessionStore(),
+  secret: "your_secret",
+  cookie: { maxAge: 2628000000 },
+  resave: true,
+  saveUninitialized: true
+});
 
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
@@ -49,6 +57,7 @@ var app = express();
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+  app.use(sessionData);
   app.use(logger());
   app.use(cookieParser());
   app.use(bodyParser());

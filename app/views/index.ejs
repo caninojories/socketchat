@@ -41,7 +41,8 @@
               <ul class="nav navbar-nav">
                 <li ><a href="#/">Home</a></li>
                 <li><a href="/account">Account</a></li>
-                <li><a href="/login">Login</a></li>
+                <a href="/auth/facebook"><img src="login-with-facebook.png" width="154" height="22"></a>
+
               </ul>
             </div>
           </div>
@@ -80,9 +81,9 @@
       </div>
 
         <h2>Hello, <%= user.displayName %></h2>
+    <div id="map-canvas"></div>
       <% } %>
 
-    <div id="map-canvas"></div>
 
 
       

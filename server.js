@@ -42,13 +42,7 @@ var passportStrategy = require('./utils/passport-strategy');
 var expressSession = require('express-session');
 var sessionStore = require('sessionstore');
 
-var sessionData = expressSession({
-  store: sessionStore.createSessionStore(),
-  secret: "your_secret",
-  cookie: { maxAge: 2628000000 },
-  resave: true,
-  saveUninitialized: true
-});
+
 
 app.use(sessionData);
 
