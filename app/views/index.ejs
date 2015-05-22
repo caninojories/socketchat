@@ -79,10 +79,10 @@
         </div>
       </div>
 
-        <h2>Hello, <%= user.username %></h2>
-    <div id="map-canvas"></div>
+        <h2>Hello, <%= user.displayName %></h2>
       <% } %>
 
+    <div id="map-canvas"></div>
 
 
       
@@ -95,14 +95,14 @@
 
    
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="public/app.js"></script>
-        <script src="public/controllers/main.js"></script>
-        <script src="public/map.js"></script>
-        <script src="public/controllers/about.js"></script>
+        
+        
+        // <!-- <script src="public/map.js"></script> -->
+     
         <!-- socket scripts -->
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
       <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/mapjs"></script>
       <script>
         var socket = io();
         //Listen for other users markers
