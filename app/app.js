@@ -38,10 +38,6 @@ var sessionData = session({
   saveUninitialized: true
 });
 
-io.use(function(socket, next){
-  sessionData(socket.request, socket.request.res, next);
-});
-
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
@@ -55,7 +51,6 @@ passport.use(new FacebookStrategy({
     });
   }
 ));
-
 
 var app = express();
 
@@ -110,17 +105,22 @@ app.get('/mapjs', function(req, res){
   res.sendFile(__dirname + '/public/map.js');
 });
 
-io.on('connection', function(socket){
+
+// Socket markers start
+
+io.on('connection', function(socket) {
     console.log('a user connected');
-  
+
     socket.on('marker', function(data) {
       data.socketId = socket.id;
-      
       markers[socket.id] = data;
+      console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
+      socket.broadcast.emit('show-marker', data);
+    });
 
-  
-  console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
-    socket.broadcast.emit('show-marker', data);
+    // socket.on('show-marker', )
+    socket.on('show-user-location', function(data) {
+      socket.broadcast.emit('show-user-location', data);
     });
 
 });
@@ -128,6 +128,8 @@ io.on('connection', function(socket){
 app.listen(port, function(){
   console.log('five minute catch up is on port 3000');
 });
+
+// socket markers end
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
