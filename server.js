@@ -15,21 +15,23 @@ app.get('/', function (req, res) {
 });
 
 app.get('/mapjs', function(req, res){
-  res.sendFile(__dirname + '/app/scripts/map.js');
+  res.sendFile(__dirname + '/app/public/map.js');
 });
 
 
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
     console.log('a user connected');
-  
+
     socket.on('marker', function(data) {
       data.socketId = socket.id;
-      
       markers[socket.id] = data;
+      console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
+      socket.broadcast.emit('show-marker', data);
+    });
 
-  
-  console.log('marker latitude: ' + data.lat + ', marker longitude:' + data.lng);
-    socket.broadcast.emit('show-marker', data);
+    // socket.on('show-marker', )
+    socket.on('show-user-location', function(data) {
+      socket.broadcast.emit('show-user-location', data);
     });
 
 });
@@ -44,12 +46,12 @@ var sessionStore = require('sessionstore');
 
 
 
-app.use(sessionData);
+// app.use(sessionData);
 
   // Here's the trick, you attach your current session data to the socket using the client cookie as a convergence point.
-io.use(function(socket, next){
-  sessionData(socket.request, socket.request.res, next);
-});
+// io.use(function(socket, next){
+//   sessionData(socket.request, socket.request.res, next);
+// });
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +59,7 @@ app.use(passport.session());
 passport.use(passportStrategy.facebook);
 
 
-// This part is quite tricky, 
+// This part is quite tricky,
 
 // This part is important, this is the function to get the id of the user in the databse based on the user object.
 passport.serializeUser(function(user, done) {
