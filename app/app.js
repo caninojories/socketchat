@@ -14,9 +14,11 @@ var http = require('http').Server(app);
 var markers = [];
 var server = require('http').createServer(app);
 var passportStrategy = require('../utils/passport-strategy');
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
 
-var FACEBOOK_APP_ID = "";
-var FACEBOOK_APP_SECRET = "";
+var FACEBOOK_APP_ID = "653014024831372";
+var FACEBOOK_APP_SECRET = "8f7186268d5d2f58856d95c657266f96";
 
 passport.use(passportStrategy.facebook);
 
@@ -55,23 +57,26 @@ passport.use(new FacebookStrategy({
 ));
 
 
-
-
 var app = express();
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.use(sessionData);
-  app.use(logger());
+  app.use(logger("combined"));
   app.use(cookieParser());
-  app.use(bodyParser());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
   app.use(methodOverride());
-  app.use(session({ secret: 'keyboard cat' }));
-
+  app.use(session({
+      secret: "keyboard cat",
+      saveUninitialized: true, // (default: true)
+      resave: true, // (default: true)
+    }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(express.static(__dirname + '/public'));
-
 
 app.get('/', function(req, res){
   res.render('index', { user: req.user });
@@ -85,12 +90,10 @@ app.get('/login', function(req, res){
   res.render('login', { user: req.user });
 });
 
-
 app.get('/auth/facebook',
   passport.authenticate('facebook'),
   function(req, res){
   });
-
 
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { failureRedirect: '/login' }),
