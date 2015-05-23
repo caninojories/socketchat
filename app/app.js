@@ -15,8 +15,8 @@ var markers = [];
 var server = require('http').createServer(app);
 var passportStrategy = require('../utils/passport-strategy');
 
-var FACEBOOK_APP_ID = 
-var FACEBOOK_APP_SECRET = 
+var FACEBOOK_APP_ID = "";
+var FACEBOOK_APP_SECRET = "";
 
 passport.use(passportStrategy.facebook);
 
