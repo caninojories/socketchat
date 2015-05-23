@@ -60,7 +60,7 @@
   socket.on('show-user-location', function(data) {
     console.log(data);
     var position = new google.maps.LatLng(data.lat, data.lon);
-    add_new_marker(position, 'jories');
+    add_new_marker(position, 'user2');
   });
 
   function add_new_marker(location, text) {

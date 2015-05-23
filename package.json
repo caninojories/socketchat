@@ -3,9 +3,13 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "body-parser": "^1.12.4",
+    "cookie-parser": "^1.3.5",
     "express": "^4.10.2",
     "express-session": "^1.10.3",
     "http": "0.0.0",
+    "method-override": "^2.3.3",
+    "morgan": "^1.5.3",
     "passport": "^0.2.2",
     "passport-facebook": "*",
     "sessionstore": "^1.0.6",
